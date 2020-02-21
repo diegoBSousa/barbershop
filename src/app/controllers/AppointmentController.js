@@ -1,6 +1,7 @@
 import Appointment from '../models/Appointment';
 import * as Yup from 'yup';
 import User from '../models/User'; 
+import File from '../models/File'; 
 import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 class AppointmentController{
@@ -11,10 +12,19 @@ class AppointmentController{
         canceled_at: null
       },
       order: [ 'date' ],
+      attributes: [ 'appointment_id', 'date'],
       include: [
         {
           model: User,
-          as: 'provider'
+          as: 'provider',
+          attributes: [ 'user_id', 'name'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: [ 'file_id', 'url', 'path']
+            }
+          ]
         }
       ]
     });

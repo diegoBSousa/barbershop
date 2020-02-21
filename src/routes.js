@@ -13,6 +13,8 @@ const upload = multer(multerConfig);
 
 routes.post('/sessions/', SessionController.store);
 routes.post('/users/', UserController.store);
+
+routes.use(authMiddleware);
 routes.put('/users/', authMiddleware, UserController.update);
 routes.post('/files/', upload.single('file'), FileController.store);
 routes.get('/providers/', ProviderController.index);

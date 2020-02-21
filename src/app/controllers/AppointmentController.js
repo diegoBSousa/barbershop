@@ -5,7 +5,13 @@ import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 class AppointmentController{
   async index(req, res){
-    return res.json({ok:true});
+    const appointments = await Appointment.findAll({
+      where: {
+        user_id: req.userId,
+        canceled_at: null
+      }
+    });
+    return res.json(appointments);
   }
 
   async store(req, res){

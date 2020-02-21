@@ -25,7 +25,7 @@ class AppointmentController{
     if(!isProvider){
       return res.status(401).json({ error: "That provider was not found"});
     }
-console.log(`userId: ${req.userId}`);
+
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,

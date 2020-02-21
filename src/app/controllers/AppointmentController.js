@@ -33,6 +33,18 @@ class AppointmentController{
       return res.status(400).json({ error: "Dates in past are not allowed"});
     }
 
+    const checkAvailability = Appointment.findOne({
+      where: {
+        provider_id,
+        canceled_at: null,
+        date: startHour
+      }
+    });
+
+    if(checkAvailability){
+      return res.status(400).json({ error: "That date is not available."});
+    }
+  
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,

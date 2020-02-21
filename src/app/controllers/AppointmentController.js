@@ -6,6 +6,10 @@ import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 class AppointmentController{
   async index(req, res){
+    const { page = 1} = req.query;
+    const limit = 20;
+    const offset = (page - 1) * limit;
+
     const appointments = await Appointment.findAll({
       where: {
         user_id: req.userId,
@@ -13,6 +17,9 @@ class AppointmentController{
       },
       order: [ 'date' ],
       attributes: [ 'appointment_id', 'date'],
+      page,
+      offset,
+      limit,
       include: [
         {
           model: User,
@@ -28,6 +35,7 @@ class AppointmentController{
         }
       ]
     });
+  
     return res.json(appointments);
   }
 

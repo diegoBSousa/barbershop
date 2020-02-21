@@ -4,6 +4,10 @@ import User from '../models/User';
 import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 class AppointmentController{
+  async index(req, res){
+    return res.json({ok:true});
+  }
+
   async store(req, res){
     const schema = Yup.object().shape({
       provider_id: Yup.number().required(),

@@ -13,6 +13,22 @@ services:
     networks:
       - demo-network
 
+  mongodb:
+    image: mongo
+    container_name: container_mongodb_demo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /dev/null
+    volumes:
+        - ./.docker/mongodb/db:/data/db
+    command: mongod --auth
+    ports:
+      - 27017:27017
+    networks:
+      - demo-network
 networks: 
   demo-network:
     driver: bridge

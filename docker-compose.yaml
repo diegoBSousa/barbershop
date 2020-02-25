@@ -10,6 +10,9 @@ services:
     environment: 
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./.docker/postgres/data:/var/lib/postgresql/data/pgdata
     networks:
       - demo-network
 

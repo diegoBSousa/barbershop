@@ -2,7 +2,9 @@ import Appointment from '../models/Appointment';
 import * as Yup from 'yup';
 import User from '../models/User'; 
 import File from '../models/File'; 
-import { startOfHour, parseISO, isBefore } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+import Notification from '../schemas/Notification';
 
 class AppointmentController{
   async index(req, res){
@@ -68,7 +70,7 @@ class AppointmentController{
       return res.status(400).json({ error: "Dates in past are not allowed"});
     }
 
-    const checkAvailability = Appointment.findOne({
+    const checkAvailability = await Appointment.findOne({
       where: {
         provider_id,
         canceled_at: null,
@@ -83,8 +85,25 @@ class AppointmentController{
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
-      startHour
+      date: startHour
     });
+
+    /**
+     * Notify service provider
+     */
+    const user = await User.findByPk(req.userId);
+
+    const formattedDate = format(
+      startHour,
+      "'dia' dd 'de' MMMM', às' H:mm'h'",
+      { locale: ptBR}
+      );
+  
+    await Notification.create({
+      content: `Novo agendamento de ${user.name} para o ${formattedDate}. `,
+      user: provider_id
+    });
+
     return res.json(appointment);
   }
 }

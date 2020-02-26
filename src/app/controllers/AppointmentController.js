@@ -108,6 +108,16 @@ class AppointmentController{
   }
 
   async delete(req, res){
+    const appointment = new Appointment.findByPk(req.params.id);
+
+    if(appointment.user_id != req.userId){
+      return res.status(400).json({
+         error: "You don't have permission to delete this appointment."
+        });
+    }
+
+    
+
     return res.json({ok:true});
   }
 }

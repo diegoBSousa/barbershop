@@ -23,6 +23,11 @@ class NotificationController{
 
     return res.json(notifications);
   }
+
+  async update(req, res){
+    const notification = await Notification.findById(req.params.id);
+    return res.json({ ok: true});
+  }
 }
 
 export default new NotificationController();

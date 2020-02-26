@@ -2,7 +2,7 @@ import Appointment from '../models/Appointment';
 import * as Yup from 'yup';
 import User from '../models/User'; 
 import File from '../models/File'; 
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import Notification from '../schemas/Notification';
 
@@ -108,7 +108,7 @@ class AppointmentController{
   }
 
   async delete(req, res){
-    const appointment = new Appointment.findByPk(req.params.id);
+    const appointment = await Appointment.findByPk(req.params.id);
 
     if(appointment.user_id != req.userId){
       return res.status(400).json({
@@ -116,9 +116,19 @@ class AppointmentController{
         });
     }
 
-    
+    const dateWithSub = subHours(appointment.date, 2);
 
-    return res.json({ok:true});
+    if(isBefore(dateWithSub, new Date())){
+      return res.status(401).json({
+        error: "You can cancel a appointment only 2 hours in advance."
+      })
+    }
+
+    appointment.canceled_at = new Date();
+    appointment.save();
+
+
+    return res.json(appointment);
   }
 }
 

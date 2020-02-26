@@ -25,8 +25,16 @@ class NotificationController{
   }
 
   async update(req, res){
-    const notification = await Notification.findById(req.params.id);
-    return res.json({ ok: true});
+    const notification = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true },
+      { new: true }
+      );
+    
+    if(!notification){
+      return res.status(404).json({ error: "This notification ID does not exist."});
+    }
+    return res.json(notification);
   }
 }
 

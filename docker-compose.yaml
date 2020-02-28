@@ -32,6 +32,20 @@ services:
       - 27017:27017
     networks:
       - demo-network
+
+  redis:
+    image: redis:alpine
+    container_name: container_redis_demo
+    restart: always
+    #environment: 
+    volumes:
+      - ./.docker/redis/data:/data
+    command: redis-server --requirepass RedisPassword2020!
+    ports:
+      - 6379:6379
+    networks: 
+      - demo-network
+
 networks: 
   demo-network:
     driver: bridge

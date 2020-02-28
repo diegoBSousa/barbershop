@@ -24,7 +24,7 @@ class Mail {
      this.transporter.use('compile', nodemailerhbs({
        viewEngine: exphbs.create({
          layoutsDir: resolve(viewPath, 'layouts'),
-         partialsDir: resolve(viewPath, 'partial'),
+         partialsDir: resolve(viewPath, 'partials'),
          defaultLayout: 'default',
          extname: '.hbs'
        }),

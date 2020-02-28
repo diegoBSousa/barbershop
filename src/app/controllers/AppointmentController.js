@@ -150,8 +150,7 @@ class AppointmentController{
         provider: appointment.provider.name,
         user: appointment.user.name,
         date: format( appointment.date, "'dia' dd 'de' MMMM', às' H:mm'h'",
-          { locale: ptBR}
-          ),
+          { locale: ptBR}),
       }
     });
 

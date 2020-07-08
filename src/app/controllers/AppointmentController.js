@@ -1,7 +1,7 @@
 import Appointment from '../models/Appointment';
 import * as Yup from 'yup';
-import User from '../models/User'; 
-import File from '../models/File'; 
+import User from '../models/User';
+import File from '../models/File';
 import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import Notification from '../schemas/Notification';
@@ -20,7 +20,7 @@ class AppointmentController{
         canceled_at: null
       },
       order: [ 'date' ],
-      attributes: [ 'appointment_id', 'date'],
+      attributes: [ 'appointment_id', 'date', 'past'],
       page,
       offset,
       limit,
@@ -39,7 +39,7 @@ class AppointmentController{
         }
       ]
     });
-  
+
     return res.json(appointments);
   }
 
@@ -83,7 +83,7 @@ class AppointmentController{
     if(checkAvailability){
       return res.status(400).json({ error: "That date is not available."});
     }
-  
+
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
@@ -100,7 +100,7 @@ class AppointmentController{
       "'dia' dd 'de' MMMM', às' H:mm'h'",
       { locale: ptBR}
       );
-  
+
     await Notification.create({
       content: `Novo agendamento de ${user.name} para o ${formattedDate}.`,
       user: provider_id

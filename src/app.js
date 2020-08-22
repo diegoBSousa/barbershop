@@ -2,11 +2,14 @@ import express from 'express';
 import routes from './routes';
 import path from 'path';
 import database from './database';
+import * as Sentry from '@sentry/node';
+import sentryConfig from './config/sentry';
 
 class App {
 
   constructor(){
     this.server = express();
+    Sentry.init(sentryConfig);
     this.middlewares();
     this.routes();
   }

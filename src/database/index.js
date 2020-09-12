@@ -27,7 +27,7 @@ class Database{
 
   mongo(){
     this.connection = mongoose.connect(
-      'mongodb://root:root@localhost:27017/barbershop?authSource=admin&readPreference=primary&appname=BarberShop&ssl=false',{
+      process.env.MONGO_URL,{
         useNewUrlParser: true,
         useFindAndModify: true,
         useUnifiedTopology: true
